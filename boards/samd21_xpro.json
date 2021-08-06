@@ -3,7 +3,10 @@
     "cpu": "cortex-m0plus",
     "extra_flags": "-D__SAMD21J18A__",
     "f_cpu": "48000000L",
-    "mcu": "samd21j18a"
+    "mcu": "samd21j18a",
+    "zephyr": {
+      "variant": "atsamd21_xpro"
+    }
   },
   "debug": {
     "jlink_device": "ATSAMD21J18",
@@ -16,7 +19,8 @@
   },
   "frameworks": [
     "cmsis",
-    "mbed"
+    "mbed",
+    "zephyr"
   ],
   "name": "Atmel SAMD21-XPRO",
   "upload": {

@@ -1,8 +1,11 @@
 {
   "build": {
-    "core": "sam",
+    "arduino": {
+        "ldscript": "flash.ld"
+    },
+    "core": "arduino",
     "cpu": "cortex-m3",
-    "extra_flags": "-w -D__SAM3X8E__ -DARDUINO_SAM_DIGIX -DARDUINO_ARCH_SAM",
+    "extra_flags": "-w -D__SAM3X8E__ -DARDUINO_SAM_DIGIX",
     "f_cpu": "84000000L",
     "hwids": [
       [
@@ -10,7 +13,6 @@
         "0x078A"
       ]
     ],
-    "ldscript": "flash.ld",
     "mcu": "at91sam3x8e",
     "usb_product": "Digistump DigiX",
     "variant": "arduino_due_x"
@@ -21,7 +23,7 @@
   "debug": {
     "jlink_device": "ATSAM3X8E",
     "openocd_chipname": "at91sam3X8E",
-    "openocd_target": "at91sam3XXX",
+    "openocd_target": "at91sam3ax_8x",
     "svd_path": "ATSAM3X8E.svd"
   },
   "frameworks": [

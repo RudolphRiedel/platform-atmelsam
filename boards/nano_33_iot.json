@@ -1,8 +1,11 @@
 {
   "build": {
-    "core": "samd",
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
+    "core": "arduino",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-DARDUINO_SAMD_NANO_33_IOT -DARDUINO_ARCH_SAMD -DCRYSTALLESS -D__SAMD21G18A__",
+    "extra_flags": "-DARDUINO_SAMD_NANO_33_IOT -DCRYSTALLESS -D__SAMD21G18A__",
     "f_cpu": "48000000L",
     "hwids": [
       [
@@ -14,10 +17,12 @@
         "0x0057"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd21g18a",
     "usb_product": "Arduino NANO 33 IoT",
-    "variant": "nano_33_iot"
+    "variant": "nano_33_iot",
+    "zephyr": {
+       "variant": "arduino_nano_33_iot"
+    }
   },
   "debug": {
     "jlink_device": "ATSAMD21G18",
@@ -27,7 +32,8 @@
   },
   "frameworks": [
     "arduino",
-    "cmsis"
+    "cmsis",
+    "zephyr"
   ],
   "name": "NANO 33 IoT",
   "upload": {

@@ -20,7 +20,7 @@ from os.path import basename, isdir, join
 from SCons.Script import (ARGUMENTS, COMMAND_LINE_TARGETS, AlwaysBuild,
                           Builder, Default, DefaultEnvironment)
 
-from platformio.util import get_serialports
+from platformio.util import get_serial_ports
 
 
 def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
@@ -33,7 +33,7 @@ def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
     if not bool(upload_options.get("disable_flushing", False)):
         env.FlushSerialBuffer("$UPLOAD_PORT")
 
-    before_ports = get_serialports()
+    before_ports = get_serial_ports()
 
     if bool(upload_options.get("use_1200bps_touch", False)):
         env.TouchSerialPort("$UPLOAD_PORT", 1200)
@@ -48,6 +48,7 @@ def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
 
 
 env = DefaultEnvironment()
+env.SConscript("compat.py", exports="env")
 platform = env.PioPlatform()
 board = env.BoardConfig()
 upload_protocol = env.subst("$UPLOAD_PROTOCOL")
@@ -111,6 +112,13 @@ if not env.get("PIOFRAMEWORK"):
 # Target: Build executable and linkable firmware
 #
 
+if "zephyr" in env.get("PIOFRAMEWORK", []):
+    env.SConscript(
+        join(platform.get_package_dir(
+            "framework-zephyr"), "scripts", "platformio", "platformio-build-pre.py"),
+        exports={"env": env}
+    )
+
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
     target_elf = join("$BUILD_DIR", "${PROGNAME}.elf")
@@ -124,6 +132,7 @@ else:
     else:
         target_firm = env.ElfToBin(
             join("$BUILD_DIR", "${PROGNAME}"), target_elf)
+        env.Depends(target_firm, "checkprogsize")
 
 AlwaysBuild(env.Alias("nobuild", target_firm))
 target_buildprog = env.Alias("buildprog", target_firm, target_firm)
@@ -158,7 +167,7 @@ if upload_protocol.startswith("blackmagic"):
             "-ex", "compare-sections",
             "-ex", "kill"
         ],
-        UPLOADCMD="$UPLOADER $UPLOADERFLAGS $BUILD_DIR/${PROGNAME}.elf"
+        UPLOADCMD="$UPLOADER $UPLOADERFLAGS \"$BUILD_DIR/${PROGNAME}.elf\""
     )
     upload_actions = [
         env.VerboseAction(env.AutodetectUploadPort, "Looking for BlackMagic port..."),
@@ -188,9 +197,10 @@ elif upload_protocol.startswith("jlink"):
         UPLOADER="JLink.exe" if system() == "Windows" else "JLinkExe",
         UPLOADERFLAGS=[
             "-device", env.BoardConfig().get("debug", {}).get("jlink_device"),
-            "-speed", "4000",
+            "-speed", env.GetProjectOption("debug_speed", "4000"),
             "-if", ("jtag" if upload_protocol == "jlink-jtag" else "swd"),
-            "-autoconnect", "1"
+            "-autoconnect", "1",
+            "-NoGui", "1"
         ],
         UPLOADCMD='$UPLOADER $UPLOADERFLAGS -CommanderScript "${__jlink_cmd_script(__env__, SOURCE)}"'
     )
@@ -207,7 +217,7 @@ elif upload_protocol == "sam-ba":
         ],
         UPLOADCMD="$UPLOADER $UPLOADERFLAGS $SOURCES"
     )
-    if board.get("build.core") == "adafruit" and board.get(
+    if board.get("build.core") in ("adafruit", "seeed", "sparkfun") and board.get(
             "build.mcu").startswith("samd51"):
         # special flags for the latest bossac tool
         env.Append(
@@ -252,12 +262,34 @@ elif upload_protocol == "stk500v2":
         env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
     ]
 
+elif upload_protocol == "mbctool":
+    env.Replace(
+        UPLOADER=join(
+            platform.get_package_dir("tool-mbctool") or "", "bin", "mbctool"),
+        UPLOADERFLAGS=[
+            "--device", "samd",
+            "--speed", "1500000",
+            "--port", '"$UPLOAD_PORT"',
+            "--upload", "$SOURCES",
+        ],
+        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
+    )
+    upload_actions = [
+        env.VerboseAction(env.AutodetectUploadPort,
+                          "Looking for upload port..."),
+        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
+    ]
+
 elif upload_protocol in debug_tools:
     openocd_args = [
         "-d%d" % (2 if int(ARGUMENTS.get("PIOVERBOSE", 0)) else 1)
     ]
     openocd_args.extend(
         debug_tools.get(upload_protocol).get("server").get("arguments", []))
+    if env.GetProjectOption("debug_speed"):
+        openocd_args.extend(
+            ["-c", "adapter speed %s" % env.GetProjectOption("debug_speed")]
+        )
     openocd_args.extend([
         "-c", "program {$SOURCE} %s verify reset; shutdown;" %
         board.get("upload.offset_address", "")
@@ -281,6 +313,14 @@ else:
     sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
 
 AlwaysBuild(env.Alias("upload", target_firm, upload_actions))
+
+#
+# Information about obsolete method of specifying linker scripts
+#
+
+if any("-Wl,-T" in f for f in env.get("LINKFLAGS", [])):
+    print("Warning! '-Wl,-T' option for specifying linker scripts is deprecated. "
+          "Please use 'board_build.ldscript' option in your 'platformio.ini' file.")
 
 #
 # Setup default targets

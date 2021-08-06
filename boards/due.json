@@ -1,8 +1,11 @@
 {
   "build": {
-    "core": "sam",
+    "arduino": {
+        "ldscript": "flash.ld"
+    },
+    "core": "arduino",
     "cpu": "cortex-m3",
-    "extra_flags": "-D__SAM3X8E__ -DARDUINO_ARCH_SAM -DARDUINO_SAM_DUE",
+    "extra_flags": "-D__SAM3X8E__ -DARDUINO_SAM_DUE",
     "f_cpu": "84000000L",
     "hwids": [
       [
@@ -18,10 +21,12 @@
         "0x003D"
       ]
     ],
-    "ldscript": "flash.ld",
     "mcu": "at91sam3x8e",
     "usb_product": "Arduino Due",
-    "variant": "arduino_due_x"
+    "variant": "arduino_due_x",
+    "zephyr": {
+       "variant": "arduino_due"
+    }
   },
   "connectivity": [
     "can"
@@ -29,13 +34,14 @@
   "debug": {
     "jlink_device": "ATSAM3X8E",
     "openocd_chipname": "at91sam3X8E",
-    "openocd_target": "at91sam3XXX",
+    "openocd_target": "at91sam3ax_8x",
     "svd_path": "ATSAM3X8E.svd"
   },
   "frameworks": [
     "arduino",
     "cmsis",
-    "simba"
+    "simba",
+    "zephyr"
   ],
   "name": "Arduino Due (Programming Port)",
   "upload": {

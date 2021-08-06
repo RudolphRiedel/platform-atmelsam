@@ -1,8 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "sodaq",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-D__SAMD21G18A__ -DARDUINO_ARCH_SAMD -DARDUINO_SODAQ_ONE",
+    "extra_flags": "-DVERY_LOW_POWER -D__SAMD21G18A__ -DARDUINO_SODAQ_ONE",
     "f_cpu": "48000000L",
     "hwids": [
       [
@@ -14,7 +17,6 @@
         "0x004d"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd21g18a",
     "system": "samd",
     "usb_product": "SODAQ ONE",

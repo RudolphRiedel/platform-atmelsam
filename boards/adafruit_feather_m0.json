@@ -1,8 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-DARDUINO_ARCH_SAMD -DARDUINO_SAMD_ZERO -DARDUINO_SAMD_FEATHER_M0 -DARM_MATH_CM0PLUS -D__SAMD21G18A__",
+    "extra_flags": "-DARDUINO_SAMD_ZERO -DARDUINO_SAMD_FEATHER_M0 -DARM_MATH_CM0PLUS -D__SAMD21G18A__",
     "f_cpu": "48000000L",
     "hwids": [
       [
@@ -18,11 +21,13 @@
         "0x0015"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd21g18a",
     "system": "samd",
     "usb_product": "Adafruit Feather M0",
-    "variant": "feather_m0"
+    "variant": "feather_m0",
+    "zephyr": {
+       "variant": "adafruit_feather_m0_basic_proto"
+    }
   },
   "debug": {
     "jlink_device": "ATSAMD21G18",
@@ -32,7 +37,8 @@
   },
   "frameworks": [
     "arduino",
-    "cmsis"
+    "cmsis",
+    "zephyr"
   ],
   "name": "Adafruit Feather M0",
   "upload": {

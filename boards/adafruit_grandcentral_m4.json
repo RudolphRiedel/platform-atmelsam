@@ -1,9 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m4",
     "extra_flags": [
-      "-DARDUINO_ARCH_SAMD",
       "-DARDUINO_GRAND_CENTRAL_M4",
       "-DADAFRUIT_GRAND_CENTRAL_M4",
       "-D__SAMD51P20A__",
@@ -24,7 +26,6 @@
         "0x0020"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd51p20a",
     "system": "samd",
     "usb_product": "Adafruit Grand Central M4",

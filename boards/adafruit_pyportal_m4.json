@@ -1,9 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m4",
     "extra_flags": [
-      "-DARDUINO_ARCH_SAMD",
       "-DARDUINO_PYPORTAL_M4",
       "-DADAFRUIT_PYPORTAL",
       "-D__SAMD51J20A__",
@@ -25,7 +27,6 @@
         "0x0035"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd51j20a",
     "system": "samd",
     "usb_product": "Adafruit PyPortal M4",

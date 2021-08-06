@@ -1,8 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-DARDUINO_ARCH_SAMD -DARDUINO_TRINKET_M0 -DCRYSTALLESS -DADAFRUIT_TRINKET_M0 -DARM_MATH_CM0PLUS -D__SAMD21E18A__",
+    "extra_flags": "-DARDUINO_TRINKET_M0 -DCRYSTALLESS -DADAFRUIT_TRINKET_M0 -DARM_MATH_CM0PLUS -D__SAMD21E18A__",
     "f_cpu": "48000000L",
     "hwids": [
       [
@@ -14,11 +17,13 @@
         "0x001E"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd21e18a",
     "system": "samd",
     "usb_product": "Adafruit Trinket M0",
-    "variant": "trinket_m0"
+    "variant": "trinket_m0",
+    "zephyr": {
+       "variant": "adafruit_trinket_m0"
+    }
   },
   "debug": {
     "jlink_device": "ATSAMD21E18",
@@ -28,7 +33,8 @@
   },
   "frameworks": [
     "arduino",
-    "cmsis"
+    "cmsis",
+    "zephyr"
   ],
   "name": "Adafruit Trinket M0",
   "upload": {

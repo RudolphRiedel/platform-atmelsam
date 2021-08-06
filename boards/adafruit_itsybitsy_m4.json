@@ -1,9 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m4",
     "extra_flags": [
-      "-DARDUINO_ARCH_SAMD",
       "-DARDUINO_ITSYBITSY_M4",
       "-DADAFRUIT_ITSYBITSY_M4_EXPRESS",
       "-D__SAMD51G19A__",
@@ -25,11 +27,13 @@
         "0x002B"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd51g19a",
     "system": "samd",
     "usb_product": "Adafruit ItsyBitsy M4",
-    "variant": "itsybitsy_m4"
+    "variant": "itsybitsy_m4",
+    "zephyr": {
+       "variant": "adafruit_itsybitsy_m4_express"
+    }
   },
   "debug": {
     "jlink_device": "ATSAMD51G19",
@@ -39,7 +43,8 @@
   },
   "frameworks": [
     "arduino",
-    "cmsis"
+    "cmsis",
+    "zephyr"
   ],
   "name": "Adafruit ItsyBitsy M4",
   "upload": {

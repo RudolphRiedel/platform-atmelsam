@@ -1,9 +1,11 @@
 {
   "build": {
+    "arduino": {
+        "ldscript": "flash_with_bootloader.ld"
+    },
     "core": "adafruit",
     "cpu": "cortex-m4",
     "extra_flags": [
-      "-DARDUINO_ARCH_SAMD",
       "-DARDUINO_FEATHER_M4",
       "-DADAFRUIT_FEATHER_M4_EXPRESS",
       "-D__SAMD51J19A__",
@@ -28,7 +30,6 @@
         "0x0032"
       ]
     ],
-    "ldscript": "flash_with_bootloader.ld",
     "mcu": "samd51j19a",
     "system": "samd",
     "usb_product": "Adafruit Feather M4",
