@@ -1,0 +1,34 @@
+{
+  "build": {
+    "cpu": "cortex-m4",
+    "extra_flags": "-D__SAME51J19A__",
+    "f_cpu": "120000000L",
+    "mcu": "same51j19a"
+  },
+  "debug": {
+    "jlink_device": "ATSAME51J19",
+    "onboard_tools": [
+      "cmsis-dap"
+    ],
+    "openocd_chipname": "at91same51j19",
+    "openocd_target": "atsame5x",
+    "svd_path": "ATSAME51J19A.svd"
+  },
+  "frameworks": [
+    "cmsis"
+  ],
+  "name": "Generic ATSAME51J19A",
+  "upload": {
+    "maximum_ram_size": 196608,
+    "maximum_size": 524288,
+    "protocol": "cmsis-dap",
+    "protocols": [
+      "cmsis-dap",
+      "blackmagic",
+      "jlink",
+      "atmel-ice"
+    ]
+  },
+  "url": "https://www.microchip.com/en-us/product/ATSAME51J19A",
+  "vendor": "Microchip"
+}
