@@ -1,7 +1,7 @@
 {
   "build": {
-    "cpu": "cortex-m4",
-    "extra_flags": "-D__SAMC21J89A__",
+    "cpu": "cortex-m0plus",
+    "extra_flags": "-D__SAMC21J18A__",
     "f_cpu": "48000000L",
     "mcu": "samc21j18a"
   },
