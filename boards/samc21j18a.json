@@ -17,7 +17,7 @@
   "frameworks": [
     "cmsis"
   ],
-  "name": "Generic ATSAMC21J18",
+  "name": "Generic ATSAMC21J18A",
   "upload": {
     "maximum_ram_size": 28672,
     "maximum_size": 262144,
