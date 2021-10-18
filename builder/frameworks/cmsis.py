@@ -174,10 +174,8 @@ env.Append(LIBPATH=[
     join(FRAMEWORK_DIR, "platformio", "ldscripts", "atmelsam")
 ])
 
-print(env.BoardConfig().get("build.ldscript", None))
-if (env.BoardConfig().get("build.ldscript", None) == None):
-    env.Replace(
-        LDSCRIPT_PATH=get_linker_script(env.BoardConfig().get("build.mcu")))
+env.Replace(
+    LDSCRIPT_PATH=get_linker_script(env.BoardConfig().get("build.mcu")))
 
 #
 # Target: Build Core Library
@@ -186,5 +184,5 @@ if (env.BoardConfig().get("build.ldscript", None) == None):
 # `BuildSources` because with `BuildLibrary` the vector table doesn't get linked in.
 env.BuildSources(
     join("$BUILD_DIR", "FrameworkCMSISVariant"),
-    join("$PROJECT_DIR", env.BoardConfig().get("build.startup_files", get_variant_dir(env.BoardConfig().get("build.mcu"))), "gcc")
+    join(get_variant_dir(env.BoardConfig().get("build.mcu")), "gcc")
 )
